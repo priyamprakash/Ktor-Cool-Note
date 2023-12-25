@@ -7,7 +7,9 @@ import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.auth.*
 import kotlinx.serialization.json.Json
+import main.kotlin.com.backend.data.checkPasswordForEmail
 import main.kotlin.com.backend.plugins.configureRouting
 
 
@@ -20,10 +22,25 @@ fun Application.module() {
     configureRouting()
     install(DefaultHeaders)
     install(CallLogging)
-//    install(Routing)
     install(ContentNegotiation) {
         json(Json {
             prettyPrint = true
         })
     }
+    install(Authentication) {
+        basic {
+            realm = "Cool Note Server"
+            validate { credentials ->
+                val email = credentials.name
+                val password = credentials.password
+                if (checkPasswordForEmail(email, password)) {
+                    UserIdPrincipal(credentials.name)
+                } else {
+                    null
+                }
+            }
+        }
+    }
+
 }
+
