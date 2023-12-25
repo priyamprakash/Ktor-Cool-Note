@@ -19,7 +19,6 @@ fun main() {
 }
 
 fun Application.module() {
-    configureRouting()
     install(DefaultHeaders)
     install(CallLogging)
     install(ContentNegotiation) {
@@ -41,6 +40,8 @@ fun Application.module() {
             }
         }
     }
+    configureRouting()
+
 
 }
 
