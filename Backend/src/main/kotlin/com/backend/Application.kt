@@ -8,7 +8,12 @@ import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import main.kotlin.com.backend.collections.User
+import main.kotlin.com.backend.data.registerUser
 
 
 fun main() {
@@ -25,6 +30,15 @@ fun Application.module() {
         json(Json {
             prettyPrint = true
         })
+    }
+
+    CoroutineScope(Dispatchers.IO).launch {
+        registerUser(
+            User(
+                "abc@2803.com",
+                "123456"
+            )
+        )
     }
 
 
